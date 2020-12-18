@@ -15,7 +15,7 @@ let pix = new PIX();
 // Exemplo 01: BRCODE estático, sem valor definido (usuário digita valor) e o identificador definido é 123
 pix.setNomeRecebedor('Hiago Silva Souza')
 pix.setCidadeRecebedor('Rio Preto')
-pix.setChave('42241458805')
+pix.setChave('fcba8826-cbff-46e2-8c40-1b39896402a8')
 pix.setIdentificador('DoaçãoLivre-GPIX') // opcional
 
 console.log(pix.getBRCode())
@@ -24,7 +24,7 @@ console.log(pix.getBRCode())
 pix = new PIX();
 pix.setNomeRecebedor('Hiago Silva Souza')
 pix.setCidadeRecebedor('Rio Preto')
-pix.setChave('42241458805')
+pix.setChave('fcba8826-cbff-46e2-8c40-1b39896402a8')
 pix.setIdentificador('123') // opcional
 pix.setCepRecebedor('15082131') // opcional
 pix.setValor(5.0) // opcional
