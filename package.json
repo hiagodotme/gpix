@@ -1,0 +1,42 @@
+{
+  "name": "gpix",
+  "version": "1.0.0",
+  "description": "Biblioteca escrita em nodejs para gerar br-code e qr-code do PIX.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiagodotme/gpix.git"
+  },
+  "keywords": [
+    "pix",
+    "brcode",
+    "br-code",
+    "qrcode",
+    "qr-code",
+    "pagamentos",
+    "brasil",
+    "gerador",
+    "gerar",
+    "node",
+    "nodejs",
+    "sdk",
+    "easy",
+    "programmer"
+  ],
+  "author": "Hiago Silva Souza <hiasilva@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hiagodotme/gpix/issues"
+  },
+  "homepage": "https://github.com/hiagodotme/gpix#readme",
+  "devDependencies": {
+    "tsc": "^1.20150623.0"
+  },
+  "dependencies": {
+    "typescript": "^4.1.3"
+  }
+}
