@@ -62,7 +62,7 @@ console.log('\nBRCODE dinâmico - GPIX >>>>\n', dpix.getBRCode());
 
 Se essa lib te ajudou fique a vontade para fazer uma doação =), pode ser R$ 0.50 hahahaha. Para isso basta ler o qrcode abaixo, ele foi gerado com o arquivo de exemplo da lib.
 
-![QRCode Doação](https://github.com/hiagodotme/gpix/blob/master/qrcode.png?raw=true)
+![QRCode Doação](https://github.com/hiagodotme/gpix/blob/main/qrcode.png?raw=true)
 
 
 # Autor
