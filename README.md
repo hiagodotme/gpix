@@ -5,7 +5,7 @@ GPIX é um biblioteca que facilita gerar br-codes dinâmicos e estáticos.
 # Exemplos de uso
 
 ```javascript
-import { PIX } from "./lib/pix";
+const { PIX } = require('gpix/dist');
 
 let pix = PIX.estatico();
 // Exemplo 01: BRCODE estático, sem valor definido (usuário digita valor) e o identificador definido é 123
