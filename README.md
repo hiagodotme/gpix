@@ -2,7 +2,16 @@
 
 GPIX é um biblioteca que facilita a geração de br-codes dinâmicos e estáticos para o arranjo PIX.
 
-# Exemplos de uso
+# Como utilizar
+
+Primeiro instale a biblioteca:
+
+```sh
+npm i gpix
+```
+
+Depois instâncie o `PIX.estatico` ou o `PIX.dinamico` e siga os exemplos abaixo
+
 
 ```javascript
 const { PIX } = require('gpix/dist');
