@@ -1,4 +1,6 @@
-export declare class PIX {
+import { IDinamico } from "./idinamico";
+import { IEstatico } from "./iestatico";
+export declare class PIX implements IDinamico, IEstatico {
     private _is_transacao_unica;
     private _chave;
     private _nome_recebedor;
@@ -7,8 +9,11 @@ export declare class PIX {
     private _cep_recebedor;
     private _identificador_transacao;
     private _descricao_transacao;
-    private _padrao_url_pix;
-    setPadraoUrlPix(padrao_url_pix: string): void;
+    private _url_padrao_pix;
+    private constructor();
+    static estatico(): IEstatico;
+    static dinamico(): IDinamico;
+    setUrlPadraoPix(url_padrao_pix: string): void;
     setChave(chave: string): void;
     setCepRecebedor(cep: string): void;
     setNomeRecebedor(nome_recebedor: string): void;

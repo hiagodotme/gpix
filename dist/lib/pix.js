@@ -12,10 +12,16 @@ var PIX = /** @class */ (function () {
         this._cep_recebedor = '';
         this._identificador_transacao = '';
         this._descricao_transacao = '';
-        this._padrao_url_pix = '';
+        this._url_padrao_pix = '';
     }
-    PIX.prototype.setPadraoUrlPix = function (padrao_url_pix) {
-        this._padrao_url_pix = padrao_url_pix;
+    PIX.estatico = function () {
+        return new PIX();
+    };
+    PIX.dinamico = function () {
+        return new PIX();
+    };
+    PIX.prototype.setUrlPadraoPix = function (url_padrao_pix) {
+        this._url_padrao_pix = url_padrao_pix;
     };
     PIX.prototype.setChave = function (chave) {
         this._chave = chave;
@@ -74,8 +80,8 @@ var PIX = /** @class */ (function () {
             lines.push("\t0014 br.gov.bcb.pix");
             lines.push("\t01" + this._rightPad(conteudoChave.length) + " " + conteudoChave);
         }
-        else if (this._padrao_url_pix) {
-            var padraoUrl = this._padrao_url_pix;
+        else if (this._url_padrao_pix) {
+            var padraoUrl = this._url_padrao_pix;
             lines.push("26" + (padraoUrl.length + extra));
             lines.push("\t0014 br.gov.bcb.pix");
             lines.push("\t25" + this._rightPad(padraoUrl.length) + " " + padraoUrl);
@@ -130,7 +136,7 @@ var PIX = /** @class */ (function () {
         }
         //#endregion
         //#region Additional Data Field
-        if (this._padrao_url_pix) {
+        if (this._url_padrao_pix) {
             lines.push("6207");
             lines.push("\t0503 ***");
         }

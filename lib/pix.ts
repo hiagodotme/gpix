@@ -1,6 +1,8 @@
 import { CRC } from "./crc/crc";
+import { IDinamico } from "./idinamico";
+import { IEstatico } from "./iestatico";
 
-export class PIX {
+export class PIX implements IDinamico, IEstatico {
 
     private _is_transacao_unica: boolean = false
     private _chave: string = ''
@@ -10,10 +12,20 @@ export class PIX {
     private _cep_recebedor: string = ''
     private _identificador_transacao: string = ''
     private _descricao_transacao: string = ''
-    private _padrao_url_pix: string = ''
+    private _url_padrao_pix: string = ''
 
-    setPadraoUrlPix(padrao_url_pix: string) {
-        this._padrao_url_pix = padrao_url_pix
+    private constructor() {}
+
+    public static estatico(): IEstatico {
+        return new PIX();
+    }
+
+    public static dinamico(): IDinamico {
+        return new PIX();
+    }
+
+    setUrlPadraoPix(url_padrao_pix: string) {
+        this._url_padrao_pix = url_padrao_pix
     }
 
     setChave(chave: string) {
@@ -91,8 +103,8 @@ export class PIX {
             lines.push(`26${conteudoChave.length + extra}`)
             lines.push(`\t0014 br.gov.bcb.pix`)
             lines.push(`\t01${this._rightPad(conteudoChave.length)} ${conteudoChave}`)
-        } else if(this._padrao_url_pix) {
-            let padraoUrl = this._padrao_url_pix
+        } else if(this._url_padrao_pix) {
+            let padraoUrl = this._url_padrao_pix
             lines.push(`26${padraoUrl.length + extra}`)
             lines.push(`\t0014 br.gov.bcb.pix`)
             lines.push(`\t25${this._rightPad(padraoUrl.length)} ${padraoUrl}`)
@@ -157,7 +169,7 @@ export class PIX {
         //#endregion
 
         //#region Additional Data Field
-        if (this._padrao_url_pix) {
+        if (this._url_padrao_pix) {
             lines.push(`6207`)
             lines.push(`\t0503 ***`)
         }
