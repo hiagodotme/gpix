@@ -1,6 +1,6 @@
 {
   "name": "gpix",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Biblioteca escrita em nodejs para gerar br-code e qr-code do PIX.",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "brasil",
     "gerador",
     "gerar",
+    "bacen",
     "node",
     "nodejs",
     "sdk",
@@ -34,9 +35,7 @@
   },
   "homepage": "https://github.com/hiagodotme/gpix#readme",
   "devDependencies": {
-    "tsc": "^1.20150623.0"
-  },
-  "dependencies": {
+    "tsc": "^1.20150623.0",
     "typescript": "^4.1.3"
   }
 }

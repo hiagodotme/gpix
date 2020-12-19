@@ -1,6 +1,6 @@
 # GPIX
 
-GPIX é um biblioteca que facilita gerar br-codes dinâmicos e estáticos.
+GPIX é um biblioteca que facilita a geração de br-codes dinâmicos e estáticos para o arranjo PIX.
 
 # Exemplos de uso
 
