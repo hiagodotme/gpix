@@ -25,4 +25,6 @@ export declare class PIX implements IDinamico, IEstatico {
     private _rightPad;
     private _normalizarTexto;
     getBRCode(): string;
+    getQRCode(): Promise<string | null>;
+    saveQRCodeFile(out: string): Promise<unknown>;
 }

@@ -1,6 +1,8 @@
 import { CRC } from "./crc/crc";
 import { IDinamico } from "./idinamico";
 import { IEstatico } from "./iestatico";
+import * as qrcode from "qrcode"
+import * as fs from "fs"
 
 export class PIX implements IDinamico, IEstatico {
 
@@ -183,6 +185,29 @@ export class PIX implements IDinamico, IEstatico {
         let finalString = lines.join('').replace(/\t/gi, '')
 
         return finalString + CRC.computeCRC(finalString)
+    }
+
+    async getQRCode() {
+        try {
+            return await qrcode.toDataURL(this.getBRCode())
+        } catch (e) {
+            return null
+        }
+    }
+
+    async saveQRCodeFile(out: string) {
+        return await new Promise( async (res, rej) => {
+
+            let base64 = await this.getQRCode()
+            if(base64 == null)
+                return rej(null);
+
+            fs.writeFile(out,  base64.replace(/^data:image\/png;base64,/, ""), 'base64', function (err) {
+                if(err) rej(null)
+                else res(true)
+            })
+
+        })
     }
 
 }

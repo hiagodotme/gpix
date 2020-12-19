@@ -7,4 +7,6 @@ export interface IEstatico {
     setValor(valor: number): void;
     setChave(chave: string): void;
     getBRCode(): string;
+    getQRCode(): Promise<string | null>;
+    saveQRCodeFile(path: string): Promise<any>;
 }
