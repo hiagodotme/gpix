@@ -27,7 +27,7 @@ export class PIX implements IDinamico, IEstatico {
     }
 
     setUrlPadraoPix(url_padrao_pix: string) {
-        this._url_padrao_pix = url_padrao_pix
+        this._url_padrao_pix = url_padrao_pix.replace('https://', '')
     }
 
     setChave(chave: string) {

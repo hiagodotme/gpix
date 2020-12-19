@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var pix_1 = require("./lib/pix");
-// Exemplo 02: BRCODE estático, com valor definido
+// Exemplo 01: BRCODE estático, com valor definido
 var pix = pix_1.PIX.estatico();
 pix.setNomeRecebedor('Hiago Silva Souza');
 pix.setCidadeRecebedor('Rio Preto');
@@ -48,7 +48,7 @@ pix.setDescricao('Doação com valor fixo - GPIX'); // opcional
 pix.setValor(5.0); // opcional
 console.log('\nDoação com valor fixo - GPIX >>>>\n', pix.getBRCode());
 pix = pix_1.PIX.estatico();
-// Exemplo 01: BRCODE estático, sem valor definido (usuário digita valor) e o identificador definido é 123
+// Exemplo 02: BRCODE estático, sem valor definido (usuário digita valor) e o identificador definido é 123
 pix.setNomeRecebedor('Hiago Silva Souza');
 pix.setCidadeRecebedor('Rio Preto');
 pix.setChave('fcba8826-cbff-46e2-8c40-1b39896402a8');

@@ -59,7 +59,7 @@ var PIX = /** @class */ (function () {
         return new PIX();
     };
     PIX.prototype.setUrlPadraoPix = function (url_padrao_pix) {
-        this._url_padrao_pix = url_padrao_pix;
+        this._url_padrao_pix = url_padrao_pix.replace('https://', '');
     };
     PIX.prototype.setChave = function (chave) {
         this._chave = chave;
