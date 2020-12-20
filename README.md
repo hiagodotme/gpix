@@ -20,11 +20,11 @@ const { PIX } = require('gpix/dist');
 let pix = PIX.static();
 pix.setReceiverName('Hiago Silva Souza')
 pix.setReceiverCity('Rio Preto')
-pix.setReceiverZipCode('15082131') // opcional
+pix.setReceiverZipCode('15082131') // optional
 pix.setKey('fcba8826-cbff-46e2-8c40-1b39896402a8')
-pix.setIdentificator('123') // opcional
-pix.setDescription('Donation with defined amount - GPIX') // opcional
-pix.setAmount(5.0) // opcional
+pix.setIdentificator('123') // optional
+pix.setDescription('Donation with defined amount - GPIX') // optional
+pix.setAmount(5.0) // optional
 
 console.log('\nDonation with defined amount - GPIX >>>>\n', pix.getBRCode())
 
@@ -56,7 +56,7 @@ console.log('\nBRCODE dinamic - GPIX >>>>\n', dpix.getBRCode());
 // Saving QRCode to physical file
 (async () => {
 
-    pix.setDescription('Free Donation / QRCODE - GPIX') // opcional
+    pix.setDescription('Free Donation / QRCODE - GPIX') // optional
 
 
     if(await pix.saveQRCodeFile('./qrcode.png')) {
