@@ -37,48 +37,50 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var pix_1 = require("./lib/pix");
-// Exemplo 01: BRCODE estático, com valor definido
-var pix = pix_1.PIX.estatico();
-pix.setNomeRecebedor('Hiago Silva Souza');
-pix.setCidadeRecebedor('Rio Preto');
-pix.setChave('fcba8826-cbff-46e2-8c40-1b39896402a8');
-pix.setIdentificador('123'); // opcional
-pix.setCepRecebedor('15082131'); // opcional
-pix.setDescricao('Doação com valor fixo - GPIX'); // opcional
-pix.setValor(5.0); // opcional
-console.log('\nDoação com valor fixo - GPIX >>>>\n', pix.getBRCode());
-pix = pix_1.PIX.estatico();
-// Exemplo 02: BRCODE estático, sem valor definido (usuário digita valor) e o identificador definido é 123
-pix.setNomeRecebedor('Hiago Silva Souza');
-pix.setCidadeRecebedor('Rio Preto');
-pix.setChave('fcba8826-cbff-46e2-8c40-1b39896402a8');
-pix.setDescricao('Doação Livre - GPIX'); // opcional
-console.log('Doação Livre - GPIX >>>>\n', pix.getBRCode());
-// Exemplo 03: BRCODE dinâmico
-var dpix = pix_1.PIX.dinamico();
-dpix.setNomeRecebedor('Logical Delivery LTDA');
-dpix.setCidadeRecebedor('Rio Preto');
-dpix.setUrlPadraoPix('url-location-instituicao');
-console.log('\nBRCODE dinâmico - GPIX >>>>\n', dpix.getBRCode());
-// Gerando QRCodes em base64
+// Exemplo 01: BRCODE static with defined amount.
+var pix = pix_1.PIX.static();
+pix.setReceiverName('Hiago Silva Souza');
+pix.setReceiverCity('Rio Preto');
+pix.setReceiverZipCode('15082131'); // opcional
+pix.setKey('fcba8826-cbff-46e2-8c40-1b39896402a8');
+pix.setIdentificator('123'); // opcional
+pix.setDescription('Donation with defined amount - GPIX'); // opcional
+pix.setAmount(5.0); // opcional
+console.log('\nDonation with defined amount - GPIX >>>>\n', pix.getBRCode());
+pix = pix_1.PIX.static();
+// Exemplo 02: Static BRCODE, with no defined amount (user types amount) and the defined identifier is 123
+pix.setReceiverName('Hiago Silva Souza');
+pix.setReceiverCity('Rio Preto');
+pix.setKey('fcba8826-cbff-46e2-8c40-1b39896402a8');
+pix.setDescription('Donation without defined amount - GPIX'); // optional
+console.log('Donation without defined amount - GPIX >>>>\n', pix.getBRCode());
+// Exemplo 03: BRCODE dinamic
+var dpix = pix_1.PIX.dinamic();
+dpix.setReceiverName('Minha Empresa LTDA');
+dpix.setReceiverCity('Rio Preto');
+dpix.setLocation('url-location-psp');
+console.log('\nBRCODE dinamic - GPIX >>>>\n', dpix.getBRCode());
+// Gerando QRCode em base64
+// Generating QRCode in base64
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/];
     });
 }); })();
+// Saving QRCode to physical file
 // Salvando QRCode em arquivo físico
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                pix.setDescricao('Doacao Livre / QRCODE - GPIX'); // opcional
+                pix.setDescription('Free Donation / QRCODE - GPIX'); // opcional
                 return [4 /*yield*/, pix.saveQRCodeFile('./qrcode.png')];
             case 1:
                 if (_a.sent()) {
-                    console.log('sucesso ao salvar qr-code estático');
+                    console.log('success in saving static QR-code');
                 }
                 else {
-                    console.log('erro ao salvar qr-code');
+                    console.log('error saving QR-code');
                 }
                 return [2 /*return*/];
         }

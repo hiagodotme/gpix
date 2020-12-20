@@ -15,7 +15,7 @@ var CRC = /** @class */ (function () {
             j = (c ^ (crc >> 8)) & 0xff;
             crc = table_1.crcTable[j] ^ (crc << 8);
         }
-        return ((crc ^ 0) & 0xffff).toString(16).toUpperCase();
+        return (((crc ^ 0) & 0xffff).toString(16).toUpperCase()).padStart(4, "0");
     };
     return CRC;
 }());

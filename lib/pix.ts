@@ -1,83 +1,83 @@
 import { CRC } from "./crc/crc";
-import { IDinamico } from "./idinamico";
-import { IEstatico } from "./iestatico";
+import { IDinamic } from "./idinamic";
+import { IStatic } from "./istatic";
 import * as qrcode from "qrcode"
 import * as fs from "fs"
 
-export class PIX implements IDinamico, IEstatico {
+export class PIX implements IDinamic, IStatic {
 
-    private _is_transacao_unica: boolean = false
-    private _chave: string = ''
-    private _nome_recebedor: string = ''
-    private _cidade_recebedor: string = ''
-    private _valor: number = 0
-    private _cep_recebedor: string = ''
-    private _identificador_transacao: string = ''
-    private _descricao_transacao: string = ''
-    private _url_padrao_pix: string = ''
+    private _is_unique_transaction: boolean = false
+    private _key: string = ''
+    private _receiver_name: string = ''
+    private _receiver_city: string = ''
+    private _amout: number = 0
+    private _zip_code: string = ''
+    private _identificator: string = ''
+    private _description: string = ''
+    private _location: string = ''
 
     private constructor() {}
 
-    public static estatico(): IEstatico {
+    public static static(): IStatic {
         return new PIX();
     }
 
-    public static dinamico(): IDinamico {
+    public static dinamic(): IDinamic {
         return new PIX();
     }
 
-    setUrlPadraoPix(url_padrao_pix: string) {
-        this._url_padrao_pix = url_padrao_pix.replace('https://', '')
+    setLocation(location: string) {
+        this._location = location.replace('https://', '')
     }
 
-    setChave(chave: string) {
-        this._chave = chave
+    setKey(key: string) {
+        this._key = key
     }
 
-    setCepRecebedor(cep: string) {
-        this._cep_recebedor = cep
+    setReceiverZipCode(zipCode: string) {
+        this._zip_code = zipCode
     }
 
-    setNomeRecebedor(nome_recebedor: string) {
-        if (nome_recebedor.length > 25)
+    setReceiverName(name: string) {
+        if (name.length > 25)
             throw 'A quantidade máxima de caracteres para o nome do recebedor é 25'
 
-        this._nome_recebedor = nome_recebedor
+        this._receiver_name = name
     }
 
-    setIdentificador(identificador_transacao: string) {
-        this._identificador_transacao = identificador_transacao
+    setIdentificator(identificator: string) {
+        this._identificator = identificator
     }
 
-    setDescricao(descricao_transacao: string) {
-        this._descricao_transacao = descricao_transacao
+    setDescription(description: string) {
+        this._description = description
     }
 
 
-    setCidadeRecebedor(cidade_recebedor: string) {
-        if (cidade_recebedor.length > 15)
+    setReceiverCity(city: string) {
+        if (city.length > 15)
             throw 'A quantidade máxima de caracteres para a cidade do recebedor é 15'
 
-        this._cidade_recebedor = cidade_recebedor
+        this._receiver_city = city
     }
 
-    setValor(valor: number) {
+    setAmount(amout: number) {
 
-        if (valor.toFixed(2).toString().length > 13)
+        if (amout.toFixed(2).toString().length > 13)
             throw 'A quantidade máxima de caracteres para o valor é 13'
 
-        this._valor = valor
+        this._amout = amout
     }
 
-    isTransacaoUnica(_is_transacao_unica: boolean) {
-        this._is_transacao_unica = _is_transacao_unica
+    isUniqueTransaction(is_unique_transaction: boolean) {
+        this._is_unique_transaction = is_unique_transaction
     }
 
     private _rightPad(value: number) {
         return value < 10 ? `0${value}` : value;
     }
 
-    private _normalizarTexto(value: string) {
+    private _normalizeText(value: string) {
         let str = value.toUpperCase().replace('Ç','C') as any
         return str['normalize']("NFD").replace(/[^A-Z0-9$%*+-\./:]/gi, ' ')
     }
@@ -90,32 +90,32 @@ export class PIX implements IDinamico, IEstatico {
         //#endregion
 
         // caso seja transação única
-        if (this._is_transacao_unica)
+        if (this._is_unique_transaction)
             lines.push('0102 12')
 
         //#region Merchant Account Information - PIX
-        let descricao_transacao = this._normalizarTexto(this._descricao_transacao || '')
+        let descricao_transacao = this._normalizeText(this._description || '')
         let extra = 14 + 8;
         if(descricao_transacao) {
             extra += 4 + descricao_transacao.length
         }
 
-        if (this._chave) {
-            let conteudoChave = this._normalizarTexto(this._chave)
-            lines.push(`26${conteudoChave.length + extra}`)
+        if (this._key) {
+            let contentKey = this._normalizeText(this._key)
+            lines.push(`26${contentKey.length + extra}`)
             lines.push(`\t0014 br.gov.bcb.pix`)
-            lines.push(`\t01${this._rightPad(conteudoChave.length)} ${conteudoChave}`)
-        } else if(this._url_padrao_pix) {
-            let padraoUrl = this._url_padrao_pix
-            lines.push(`26${padraoUrl.length + extra}`)
+            lines.push(`\t01${this._rightPad(contentKey.length)} ${contentKey}`)
+        } else if(this._location) {
+            let location = this._location
+            lines.push(`26${location.length + extra}`)
             lines.push(`\t0014 br.gov.bcb.pix`)
-            lines.push(`\t25${this._rightPad(padraoUrl.length)} ${padraoUrl}`)
+            lines.push(`\t25${this._rightPad(location.length)} ${location}`)
         } else {
             throw 'É necessário informar uma URL ou então uma chave pix.'
         }
 
         // descricao
-        if(this._descricao_transacao) {
+        if(this._description) {
             lines.push(`\t02${this._rightPad(descricao_transacao.length)} ${descricao_transacao}`)
         }
 
@@ -130,9 +130,9 @@ export class PIX implements IDinamico, IEstatico {
         //#endregion
 
         //#region Transaction Amount
-        if (this._valor) {
-            let valor = this._normalizarTexto(this._valor.toFixed(2).toString())
-            if (this._valor > 0)
+        if (this._amout) {
+            let valor = this._normalizeText(this._amout.toFixed(2).toString())
+            if (this._amout > 0)
                 lines.push(`54${this._rightPad(valor.length)} ${valor}`)
         }
         //#endregion
@@ -143,27 +143,27 @@ export class PIX implements IDinamico, IEstatico {
         //#endregion
 
         //#region Merchant Name
-        let nome_recebedor = this._normalizarTexto(this._nome_recebedor)
-        lines.push(`59${this._rightPad(nome_recebedor.length)} ${nome_recebedor}`)
+        let receiver_name = this._normalizeText(this._receiver_name)
+        lines.push(`59${this._rightPad(receiver_name.length)} ${receiver_name}`)
         //#endregion
 
         //#region Merchant City
-        let cidade_recebedor = this._normalizarTexto(this._cidade_recebedor)
-        lines.push(`60${this._rightPad(cidade_recebedor.length)} ${cidade_recebedor}`)
+        let receiver_city = this._normalizeText(this._receiver_city)
+        lines.push(`60${this._rightPad(receiver_city.length)} ${receiver_city}`)
         //#endregion
 
         //#region Postal Code
-        if (this._cep_recebedor) {
-            let codigo_postal = this._normalizarTexto(this._cep_recebedor)
-            lines.push(`61${this._rightPad(codigo_postal.length)} ${codigo_postal}`)
+        if (this._zip_code) {
+            let zip_code = this._normalizeText(this._zip_code)
+            lines.push(`61${this._rightPad(zip_code.length)} ${zip_code}`)
         }
         //#endregion
 
         //#region Additional Data Field
-        if (this._identificador_transacao) {
-            let identificador_transacao = this._normalizarTexto(this._identificador_transacao)
-            lines.push(`62${identificador_transacao.length + 38}`)
-            lines.push(`\t05${this._rightPad(identificador_transacao.length)} ${identificador_transacao}`)
+        if (this._identificator) {
+            let transaction_identificator = this._normalizeText(this._identificator)
+            lines.push(`62${transaction_identificator.length + 38}`)
+            lines.push(`\t05${this._rightPad(transaction_identificator.length)} ${transaction_identificator}`)
             lines.push(`\t5030`)
             lines.push(`\t\t0017 br.gov.bcb.brcode`)
             lines.push(`\t\t0105 1.0.0`)
@@ -171,7 +171,7 @@ export class PIX implements IDinamico, IEstatico {
         //#endregion
 
         //#region Additional Data Field
-        if (this._url_padrao_pix) {
+        if (this._location) {
             lines.push(`6207`)
             lines.push(`\t0503 ***`)
         }

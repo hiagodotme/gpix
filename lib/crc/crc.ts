@@ -12,6 +12,6 @@ export class CRC {
           crc = crcTable[j] ^ (crc << 8);
         }
 
-        return ((crc ^ 0) & 0xffff).toString(16).toUpperCase();      
+        return (((crc ^ 0) & 0xffff).toString(16).toUpperCase()).padStart(4, "0");
     }
 }

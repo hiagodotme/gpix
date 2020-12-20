@@ -42,59 +42,59 @@ var qrcode = require("qrcode");
 var fs = require("fs");
 var PIX = /** @class */ (function () {
     function PIX() {
-        this._is_transacao_unica = false;
-        this._chave = '';
-        this._nome_recebedor = '';
-        this._cidade_recebedor = '';
-        this._valor = 0;
-        this._cep_recebedor = '';
-        this._identificador_transacao = '';
-        this._descricao_transacao = '';
-        this._url_padrao_pix = '';
+        this._is_unique_transaction = false;
+        this._key = '';
+        this._receiver_name = '';
+        this._receiver_city = '';
+        this._amout = 0;
+        this._zip_code = '';
+        this._identificator = '';
+        this._description = '';
+        this._location = '';
     }
-    PIX.estatico = function () {
+    PIX.static = function () {
         return new PIX();
     };
-    PIX.dinamico = function () {
+    PIX.dinamic = function () {
         return new PIX();
     };
-    PIX.prototype.setUrlPadraoPix = function (url_padrao_pix) {
-        this._url_padrao_pix = url_padrao_pix.replace('https://', '');
+    PIX.prototype.setLocation = function (location) {
+        this._location = location.replace('https://', '');
     };
-    PIX.prototype.setChave = function (chave) {
-        this._chave = chave;
+    PIX.prototype.setKey = function (key) {
+        this._key = key;
     };
-    PIX.prototype.setCepRecebedor = function (cep) {
-        this._cep_recebedor = cep;
+    PIX.prototype.setReceiverZipCode = function (zipCode) {
+        this._zip_code = zipCode;
     };
-    PIX.prototype.setNomeRecebedor = function (nome_recebedor) {
-        if (nome_recebedor.length > 25)
+    PIX.prototype.setReceiverName = function (name) {
+        if (name.length > 25)
             throw 'A quantidade máxima de caracteres para o nome do recebedor é 25';
-        this._nome_recebedor = nome_recebedor;
+        this._receiver_name = name;
     };
-    PIX.prototype.setIdentificador = function (identificador_transacao) {
-        this._identificador_transacao = identificador_transacao;
+    PIX.prototype.setIdentificator = function (identificator) {
+        this._identificator = identificator;
     };
-    PIX.prototype.setDescricao = function (descricao_transacao) {
-        this._descricao_transacao = descricao_transacao;
+    PIX.prototype.setDescription = function (description) {
+        this._description = description;
     };
-    PIX.prototype.setCidadeRecebedor = function (cidade_recebedor) {
-        if (cidade_recebedor.length > 15)
+    PIX.prototype.setReceiverCity = function (city) {
+        if (city.length > 15)
             throw 'A quantidade máxima de caracteres para a cidade do recebedor é 15';
-        this._cidade_recebedor = cidade_recebedor;
+        this._receiver_city = city;
     };
-    PIX.prototype.setValor = function (valor) {
-        if (valor.toFixed(2).toString().length > 13)
+    PIX.prototype.setAmount = function (amout) {
+        if (amout.toFixed(2).toString().length > 13)
             throw 'A quantidade máxima de caracteres para o valor é 13';
-        this._valor = valor;
+        this._amout = amout;
     };
-    PIX.prototype.isTransacaoUnica = function (_is_transacao_unica) {
-        this._is_transacao_unica = _is_transacao_unica;
+    PIX.prototype.isUniqueTransaction = function (is_unique_transaction) {
+        this._is_unique_transaction = is_unique_transaction;
     };
     PIX.prototype._rightPad = function (value) {
         return value < 10 ? "0" + value : value;
     };
-    PIX.prototype._normalizarTexto = function (value) {
+    PIX.prototype._normalizeText = function (value) {
         var str = value.toUpperCase().replace('Ç', 'C');
         return str['normalize']("NFD").replace(/[^A-Z0-9$%*+-\./:]/gi, ' ');
     };
@@ -104,31 +104,31 @@ var PIX = /** @class */ (function () {
         lines.push("0002 01");
         //#endregion
         // caso seja transação única
-        if (this._is_transacao_unica)
+        if (this._is_unique_transaction)
             lines.push('0102 12');
         //#region Merchant Account Information - PIX
-        var descricao_transacao = this._normalizarTexto(this._descricao_transacao || '');
+        var descricao_transacao = this._normalizeText(this._description || '');
         var extra = 14 + 8;
         if (descricao_transacao) {
             extra += 4 + descricao_transacao.length;
         }
-        if (this._chave) {
-            var conteudoChave = this._normalizarTexto(this._chave);
-            lines.push("26" + (conteudoChave.length + extra));
+        if (this._key) {
+            var contentKey = this._normalizeText(this._key);
+            lines.push("26" + (contentKey.length + extra));
             lines.push("\t0014 br.gov.bcb.pix");
-            lines.push("\t01" + this._rightPad(conteudoChave.length) + " " + conteudoChave);
+            lines.push("\t01" + this._rightPad(contentKey.length) + " " + contentKey);
         }
-        else if (this._url_padrao_pix) {
-            var padraoUrl = this._url_padrao_pix;
-            lines.push("26" + (padraoUrl.length + extra));
+        else if (this._location) {
+            var location_1 = this._location;
+            lines.push("26" + (location_1.length + extra));
             lines.push("\t0014 br.gov.bcb.pix");
-            lines.push("\t25" + this._rightPad(padraoUrl.length) + " " + padraoUrl);
+            lines.push("\t25" + this._rightPad(location_1.length) + " " + location_1);
         }
         else {
             throw 'É necessário informar uma URL ou então uma chave pix.';
         }
         // descricao
-        if (this._descricao_transacao) {
+        if (this._description) {
             lines.push("\t02" + this._rightPad(descricao_transacao.length) + " " + descricao_transacao);
         }
         //#endregion
@@ -139,9 +139,9 @@ var PIX = /** @class */ (function () {
         lines.push("5303 986"); // 989 = R$
         //#endregion
         //#region Transaction Amount
-        if (this._valor) {
-            var valor = this._normalizarTexto(this._valor.toFixed(2).toString());
-            if (this._valor > 0)
+        if (this._amout) {
+            var valor = this._normalizeText(this._amout.toFixed(2).toString());
+            if (this._amout > 0)
                 lines.push("54" + this._rightPad(valor.length) + " " + valor);
         }
         //#endregion
@@ -150,31 +150,31 @@ var PIX = /** @class */ (function () {
         lines.push("5802 BR");
         //#endregion
         //#region Merchant Name
-        var nome_recebedor = this._normalizarTexto(this._nome_recebedor);
-        lines.push("59" + this._rightPad(nome_recebedor.length) + " " + nome_recebedor);
+        var receiver_name = this._normalizeText(this._receiver_name);
+        lines.push("59" + this._rightPad(receiver_name.length) + " " + receiver_name);
         //#endregion
         //#region Merchant City
-        var cidade_recebedor = this._normalizarTexto(this._cidade_recebedor);
-        lines.push("60" + this._rightPad(cidade_recebedor.length) + " " + cidade_recebedor);
+        var receiver_city = this._normalizeText(this._receiver_city);
+        lines.push("60" + this._rightPad(receiver_city.length) + " " + receiver_city);
         //#endregion
         //#region Postal Code
-        if (this._cep_recebedor) {
-            var codigo_postal = this._normalizarTexto(this._cep_recebedor);
-            lines.push("61" + this._rightPad(codigo_postal.length) + " " + codigo_postal);
+        if (this._zip_code) {
+            var zip_code = this._normalizeText(this._zip_code);
+            lines.push("61" + this._rightPad(zip_code.length) + " " + zip_code);
         }
         //#endregion
         //#region Additional Data Field
-        if (this._identificador_transacao) {
-            var identificador_transacao = this._normalizarTexto(this._identificador_transacao);
-            lines.push("62" + (identificador_transacao.length + 38));
-            lines.push("\t05" + this._rightPad(identificador_transacao.length) + " " + identificador_transacao);
+        if (this._identificator) {
+            var transaction_identificator = this._normalizeText(this._identificator);
+            lines.push("62" + (transaction_identificator.length + 38));
+            lines.push("\t05" + this._rightPad(transaction_identificator.length) + " " + transaction_identificator);
             lines.push("\t5030");
             lines.push("\t\t0017 br.gov.bcb.brcode");
             lines.push("\t\t0105 1.0.0");
         }
         //#endregion
         //#region Additional Data Field
-        if (this._url_padrao_pix) {
+        if (this._location) {
             lines.push("6207");
             lines.push("\t0503 ***");
         }

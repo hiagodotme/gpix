@@ -1,6 +1,6 @@
 {
   "name": "gpix",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "Biblioteca escrita em nodejs para gerar br-code e qr-code do PIX.",
   "main": "index.js",
   "scripts": {
