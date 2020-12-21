@@ -107,10 +107,10 @@ var PIX = /** @class */ (function () {
         if (this._is_unique_transaction)
             lines.push('0102 12');
         //#region Merchant Account Information - PIX
-        var descricao_transacao = this._normalizeText(this._description || '');
+        var description = this._normalizeText(this._description || '');
         var extra = 14 + 8;
-        if (descricao_transacao) {
-            extra += 4 + descricao_transacao.length;
+        if (description) {
+            extra += 4 + description.length;
         }
         if (this._key) {
             var contentKey = this._normalizeText(this._key);
@@ -129,7 +129,7 @@ var PIX = /** @class */ (function () {
         }
         // descricao
         if (this._description) {
-            lines.push("\t02" + this._rightPad(descricao_transacao.length) + " " + descricao_transacao);
+            lines.push("\t02" + this._rightPad(description.length) + " " + description);
         }
         //#endregion
         //#region Merchant Category Code

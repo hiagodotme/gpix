@@ -94,10 +94,10 @@ export class PIX implements IDinamic, IStatic {
             lines.push('0102 12')
 
         //#region Merchant Account Information - PIX
-        let descricao_transacao = this._normalizeText(this._description || '')
+        let description = this._normalizeText(this._description || '')
         let extra = 14 + 8;
-        if(descricao_transacao) {
-            extra += 4 + descricao_transacao.length
+        if(description) {
+            extra += 4 + description.length
         }
 
         if (this._key) {
@@ -116,7 +116,7 @@ export class PIX implements IDinamic, IStatic {
 
         // descricao
         if(this._description) {
-            lines.push(`\t02${this._rightPad(descricao_transacao.length)} ${descricao_transacao}`)
+            lines.push(`\t02${this._rightPad(description.length)} ${description}`)
         }
 
         //#endregion
