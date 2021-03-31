@@ -96,7 +96,7 @@ var PIX = /** @class */ (function () {
     };
     PIX.prototype._normalizeText = function (value) {
         var str = value.toUpperCase().replace('Ç', 'C');
-        return str['normalize']("NFD").replace(/[^A-Z0-9$%*+-\./:]/gi, ' ');
+        return str['normalize']("NFD").replace(/[^A-Z0-9$@%*+-\./:]/gi, ' ');
     };
     PIX.prototype.getBRCode = function () {
         var lines = [];
