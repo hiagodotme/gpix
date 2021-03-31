@@ -1,8 +1,8 @@
 import { CRC } from "./crc/crc";
 import { IDinamic } from "./idinamic";
 import { IStatic } from "./istatic";
-import * as qrcode from "qrcode"
-import * as fs from "fs"
+import * as qrcode from "qrcode";
+import * as fs from "fs";
 
 export class PIX implements IDinamic, IStatic {
 
@@ -79,7 +79,7 @@ export class PIX implements IDinamic, IStatic {
 
     private _normalizeText(value: string) {
         let str = value.toUpperCase().replace('Ç','C') as any
-        return str['normalize']("NFD").replace(/[^A-Z0-9$%*+-\./:]/gi, ' ')
+        return str['normalize']("NFD").replace(/[^A-Z0-9$@%*+-\./:]/gi, ' ')
     }
 
     getBRCode() {
