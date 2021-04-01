@@ -1,13 +1,13 @@
 export interface IStatic {
 
-    setReceiverName(name: string): void;
-    setReceiverCity(city: string): void;
-    setReceiverZipCode(zipCode: string): void;
-    setIdentificator(identificator: string): void;
-    setDescription(description: string): void;
-    setAmount(amount: number): void;
-    setKey(key: string): void;
-    isUniqueTransaction(is_unique_transaction: boolean): void;
+    setReceiverName(name: string): IStatic;
+    setReceiverCity(city: string): IStatic;
+    setReceiverZipCode(zipCode: string): IStatic;
+    setIdentificator(identificator: string): IStatic;
+    setDescription(description: string): IStatic;
+    setAmount(amount: number): IStatic;
+    setKey(key: string): IStatic;
+    isUniqueTransaction(is_unique_transaction: boolean): IStatic;
 
     getBRCode(): string;
     getQRCode(): Promise<string | null>;

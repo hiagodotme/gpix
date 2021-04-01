@@ -1,14 +1,14 @@
 export interface IDinamic {
 
-    setReceiverName(name: string): void;
-    setReceiverCity(city: string): void;
-    setReceiverZipCode(zipCode: string): void;
-    // setDescription(description: string): void;
+    setReceiverName(name: string): IDinamic;
+    setReceiverCity(city: string): IDinamic;
+    setReceiverZipCode(zipCode: string): IDinamic;
+    // setDescription(description: string): IDinamic;
 
     /** @fixme Some PSP are not recovering the amount through the charge. Then temporarily enter the amount to avoid problems. */
-    setAmount(amount: number): void;
+    setAmount(amount: number): IDinamic;
 
-    setLocation(location: string): void;
+    setLocation(location: string): IDinamic;
     
     getBRCode(): string;
     getQRCode(): Promise<string | null>;
