@@ -16,7 +16,7 @@ export class PIX implements IDinamic, IStatic {
     private _description: string = ''
     private _location: string = ''
 
-    private constructor() {}
+    private constructor() { }
 
     public static static(): IStatic {
         return new PIX();
@@ -35,6 +35,10 @@ export class PIX implements IDinamic, IStatic {
     }
 
     setReceiverZipCode(zipCode: string) {
+
+        if (zipCode.length != 8)
+            throw 'A quantidade de caracteres para o código postal é 8'
+
         this._zip_code = zipCode
     }
 
@@ -46,10 +50,19 @@ export class PIX implements IDinamic, IStatic {
     }
 
     setIdentificator(identificator: string) {
+        if (identificator.length > 25)
+            throw 'A quantidade máxima de caracteres para o identificador é 25'
+        if (identificator.match(/[^0-9|a-z]/gi))
+            throw 'Utilize apenas letras e números no identificador.'
+
         this._identificator = identificator
     }
 
     setDescription(description: string) {
+
+        if (description.length > 50)
+            throw 'A quantidade máxima de caracteres para a descrição é 50'
+
         this._description = description
     }
 
@@ -73,118 +86,57 @@ export class PIX implements IDinamic, IStatic {
         this._is_unique_transaction = is_unique_transaction
     }
 
-    private _rightPad(value: number) {
-        return value < 10 ? `0${value}` : value;
-    }
-
-    private _normalizeText(value: string) {
-        let str = value.toUpperCase().replace('Ç','C') as any
-        return str['normalize']("NFD").replace(/[^A-Z0-9$@%*+-\./:]/gi, ' ')
-    }
-
     getBRCode() {
         let lines = []
 
-        //#region Payload Format Indicator
-        lines.push(`0002 01`)
-        //#endregion
+        // Payload Format Indicator
+        lines.push(this._getEMV('00', '01'))
 
-        // caso seja transação única
-        if (this._is_unique_transaction)
-            lines.push('0102 12')
+        // Is Unique Transaction?
+        lines.push(this._getEMV('01', this._is_unique_transaction ? '12' : '11'))
 
-        //#region Merchant Account Information - PIX
-        let description = this._normalizeText(this._description || '')
-        let extra = 14 + 8;
-        if(description) {
-            extra += 4 + description.length
-        }
-
-        if (this._key) {
-            let contentKey = this._normalizeText(this._key)
-            lines.push(`26${contentKey.length + extra}`)
-            lines.push(`\t0014 br.gov.bcb.pix`)
-            lines.push(`\t01${this._rightPad(contentKey.length)} ${contentKey}`)
-        } else if(this._location) {
-            let location = this._location
-            lines.push(`26${location.length + extra}`)
-            lines.push(`\t0014 br.gov.bcb.pix`)
-            lines.push(`\t25${this._rightPad(location.length)} ${location}`)
-        } else {
+        // Merchant Account Information - Pix	
+        if (!this._key && !this._location) {
             throw 'É necessário informar uma URL ou então uma chave pix.'
         }
+        lines.push(this._getEMV('26', this._generateAccountInformation()));
 
-        // descricao
-        if(this._description) {
-            lines.push(`\t02${this._rightPad(description.length)} ${description}`)
-        }
+        // Merchant Category Code
+        lines.push(this._getEMV('52', '0000'));
 
-        //#endregion
+        // Transaction Currency
+        lines.push(this._getEMV('53', '986'));
 
-        //#region Merchant Category Code
-        lines.push(`5204 0000`)
-        //#endregion
-
-        //#region Transaction Currency
-        lines.push(`5303 986`) // 989 = R$
-        //#endregion
-
-        //#region Transaction Amount
+        //Transaction Amount
         if (this._amout) {
-            let valor = this._normalizeText(this._amout.toFixed(2).toString())
-            if (this._amout > 0)
-                lines.push(`54${this._rightPad(valor.length)} ${valor}`)
+            lines.push(this._getEMV('54', this._amout.toFixed(2)))
         }
-        //#endregion
 
-        //#region Country Code
-        /** @length 02 */
-        lines.push(`5802 BR`)
-        //#endregion
+        // Country Code
+        lines.push(this._getEMV('58', 'BR'))
 
-        //#region Merchant Name
+        // Merchant Name
         let receiver_name = this._normalizeText(this._receiver_name)
-        lines.push(`59${this._rightPad(receiver_name.length)} ${receiver_name}`)
-        //#endregion
+        lines.push(this._getEMV('59', receiver_name))
 
-        //#region Merchant City
+        // Merchant City
         let receiver_city = this._normalizeText(this._receiver_city)
-        lines.push(`60${this._rightPad(receiver_city.length)} ${receiver_city}`)
-        //#endregion
+        lines.push(this._getEMV('60', receiver_city))
 
-        //#region Postal Code
+        // Postal Code
         if (this._zip_code) {
             let zip_code = this._normalizeText(this._zip_code)
-            lines.push(`61${this._rightPad(zip_code.length)} ${zip_code}`)
+            lines.push(this._getEMV('61', zip_code))
         }
-        //#endregion
 
-        //#region Additional Data Field
-        if (this._identificator) {
-            let transaction_identificator = this._normalizeText(this._identificator)
-            lines.push(`62${transaction_identificator.length + 38}`)
-            lines.push(`\t05${this._rightPad(transaction_identificator.length)} ${transaction_identificator}`)
-            lines.push(`\t5030`)
-            lines.push(`\t\t0017 br.gov.bcb.brcode`)
-            lines.push(`\t\t0105 1.0.0`)
-        }
-        //#endregion
-
-        //#region Additional Data Field
-        if (this._location) {
-            lines.push(`6207`)
-            lines.push(`\t0503 ***`)
-        }
-        //#endregion
+        // Additional Data Field
+        lines.push(this._additionalDataField())
 
         lines.push(`6304`)
 
         // fix: nome recebedor
-        lines = lines.map(item => item.replace(' ', ''));
-
-        let finalString = lines.join('').replace(/\t/gi, '')
-
-        return finalString + CRC.computeCRC(finalString)
+        const payloadString = lines.join('');
+        return payloadString + CRC.computeCRC(payloadString)
     }
 
     async getQRCode() {
@@ -196,18 +148,64 @@ export class PIX implements IDinamic, IStatic {
     }
 
     async saveQRCodeFile(out: string) {
-        return await new Promise( async (res, rej) => {
+        return await new Promise(async (res, rej) => {
 
             let base64 = await this.getQRCode()
-            if(base64 == null)
+            if (base64 == null)
                 return rej(null);
 
-            fs.writeFile(out,  base64.replace(/^data:image\/png;base64,/, ""), 'base64', function (err) {
-                if(err) rej(null)
+            fs.writeFile(out, base64.replace(/^data:image\/png;base64,/, ""), 'base64', function (err) {
+                if (err) rej(null)
                 else res(true)
             })
 
         })
+    }
+
+
+    private _normalizeText(value: string) {
+        return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:]/gi, ' ')
+    }
+
+
+    private _generateAccountInformation(): string {
+        const payload = [];
+        payload.push(this._getEMV('00', 'br.gov.bcb.pix'));
+
+        if (this._key) {
+            payload.push(this._getEMV('01', this._normalizeText(this._key)));
+        }
+        if (this._location) {
+            payload.push(this._getEMV('25', this._normalizeText(this._location)));
+        }
+        if (this._description) {
+            payload.push(this._getEMV('02', this._normalizeText(this._description)));
+        }
+        return payload.join('');
+    }
+
+    private _additionalDataField() {
+
+        if (this._identificator) {
+            let identificator = this._normalizeText(this._identificator)
+            let reference_label = this._getEMV('05', identificator)
+
+            // não funciona no inter/itau.
+            // let gui = this._getEMV('00', 'br.gov.bcb.brcode')
+            // let version = this._getEMV('01', '1.0.0')
+            // let payment_system_specific_template = this._getEMV('50', gui + version)
+
+            return this._getEMV('62', reference_label);
+
+        } else {
+            return this._getEMV('62', this._getEMV('05', '***'));
+        }
+
+    }
+
+    private _getEMV(id: string, string: string) {
+        const len = string.length.toString().padStart(2, '0');
+        return `${id}${len}${string}`;
     }
 
 }

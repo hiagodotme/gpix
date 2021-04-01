@@ -7,6 +7,7 @@ export interface IStatic {
     setDescription(description: string): void;
     setAmount(amount: number): void;
     setKey(key: string): void;
+    isUniqueTransaction(is_unique_transaction: boolean): void;
 
     getBRCode(): string;
     getQRCode(): Promise<string | null>;
