@@ -28,10 +28,12 @@ export class PIX implements IDinamic, IStatic {
 
     setLocation(location: string) {
         this._location = location.replace('https://', '')
+        return this;
     }
 
     setKey(key: string) {
         this._key = key
+        return this;
     }
 
     setReceiverZipCode(zipCode: string) {
@@ -40,6 +42,7 @@ export class PIX implements IDinamic, IStatic {
             throw 'A quantidade de caracteres para o código postal é 8'
 
         this._zip_code = zipCode
+        return this;
     }
 
     setReceiverName(name: string) {
@@ -47,6 +50,7 @@ export class PIX implements IDinamic, IStatic {
             throw 'A quantidade máxima de caracteres para o nome do recebedor é 25'
 
         this._receiver_name = name
+        return this;
     }
 
     setIdentificator(identificator: string) {
@@ -56,6 +60,7 @@ export class PIX implements IDinamic, IStatic {
             throw 'Utilize apenas letras e números no identificador.'
 
         this._identificator = identificator
+        return this;
     }
 
     setDescription(description: string) {
@@ -64,6 +69,7 @@ export class PIX implements IDinamic, IStatic {
             throw 'A quantidade máxima de caracteres para a descrição é 50'
 
         this._description = description
+        return this;
     }
 
 
@@ -72,6 +78,7 @@ export class PIX implements IDinamic, IStatic {
             throw 'A quantidade máxima de caracteres para a cidade do recebedor é 15'
 
         this._receiver_city = city
+        return this;
     }
 
     setAmount(amout: number) {
@@ -80,10 +87,12 @@ export class PIX implements IDinamic, IStatic {
             throw 'A quantidade máxima de caracteres para o valor é 13'
 
         this._amout = amout
+        return this;
     }
 
     isUniqueTransaction(is_unique_transaction: boolean) {
         this._is_unique_transaction = is_unique_transaction
+        return this;
     }
 
     getBRCode() {
