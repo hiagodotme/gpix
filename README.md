@@ -19,34 +19,35 @@ Then start with `PIX.static()` or `PIX.dinamic()` and follow the examples below:
 const { PIX } = require('gpix/dist');
 
 // Example 01: BRCODE static with defined amount.
-let pix = PIX.static();
-pix.setReceiverName('Hiago Silva Souza')
-pix.setReceiverCity('Rio Preto')
-pix.setReceiverZipCode('15082131') // optional
-pix.setKey('fcba8826-cbff-46e2-8c40-1b39896402a8')
-pix.setIdentificator('123') // optional
-pix.setDescription('Donation with defined amount - GPIX') // optional
-pix.isUniqueTransaction(true) // optional
-pix.setAmount(5.0) // optional
+let pix = PIX.static()
+    .setReceiverName('Hiago Silva Souza')
+    .setReceiverCity('Rio Preto')
+    .setReceiverZipCode('15082131') // optional
+    .setKey('fcba8826-cbff-46e2-8c40-1b39896402a8')
+    .setIdentificator('123') // optional
+    .setDescription('Donation with defined amount - GPIX') // optional
+    .isUniqueTransaction(true) // optional
+    .setAmount(5.0) // optional
 
 console.log('\nDonation with defined amount - GPIX >>>>\n', pix.getBRCode())
 
-pix = PIX.static();
 // Example 02: Static BRCODE, with no defined amount (user types amount) and the defined identifier is 123
-pix.setReceiverName('Hiago Silva Souza')
-pix.setReceiverCity('Rio Preto')
-pix.setKey('nubank@hiago.me')
-pix.setDescription('Donation without defined amount - GPIX') // optional
+pix = PIX.static()
+    .setReceiverName('Hiago Silva Souza')
+    .setReceiverCity('Rio Preto')
+    .setKey('nubank@hiago.me')
+    .setDescription('Donation without defined amount - GPIX') // optional
 
 console.log('Donation without defined amount - GPIX >>>>\n', pix.getBRCode())
 
 
 // Example 03: BRCODE dinamic
-let dpix = PIX.dinamic();
-dpix.setReceiverName('Minha Empresa LTDA')
-dpix.setReceiverCity('Rio Preto')
-dpix.setLocation('url-location-psp')
-dpix.setAmount(10.4) // some PSP are not recovering the amount through the charge. Then temporarily enter the amount to avoid problems.
+let dpix = PIX.dinamic()
+    .setReceiverName('Minha Empresa LTDA')
+    .setReceiverCity('Rio Preto')
+    .setLocation('url-location-psp')
+    .setAmount(10.4) // some PSP are not recovering the amount through the charge. Then temporarily enter the amount to avoid problems.
+
 console.log('\nBRCODE dinamic - GPIX >>>>\n', dpix.getBRCode());
 
 // Generating QRCode in base64
