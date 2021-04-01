@@ -22,8 +22,10 @@ export declare class PIX implements IDinamic, IStatic {
     setReceiverCity(city: string): void;
     setAmount(amout: number): void;
     isUniqueTransaction(is_unique_transaction: boolean): void;
-    private _rightPad;
     private _normalizeText;
+    private _generateAccountInformation;
+    private _additionalDataField;
+    private _getEMV;
     getBRCode(): string;
     getQRCode(): Promise<string | null>;
     saveQRCodeFile(out: string): Promise<unknown>;

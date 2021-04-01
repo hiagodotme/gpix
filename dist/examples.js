@@ -41,40 +41,33 @@ var pix_1 = require("./lib/pix");
 var pix = pix_1.PIX.static();
 pix.setReceiverName('Hiago Silva Souza');
 pix.setReceiverCity('Rio Preto');
-pix.setReceiverZipCode('15082131'); // opcional
 pix.setKey('fcba8826-cbff-46e2-8c40-1b39896402a8');
-pix.setIdentificator('123'); // opcional
 pix.setDescription('Donation with defined amount - GPIX'); // opcional
+pix.setReceiverZipCode('15082131'); // opcional
+pix.setIdentificator('123'); // opcional
 pix.setAmount(5.0); // opcional
 console.log('\nDonation with defined amount - GPIX >>>>\n', pix.getBRCode());
 pix = pix_1.PIX.static();
 // Example 02: Static BRCODE, with no defined amount (user types amount) and the defined identifier is 123
 pix.setReceiverName('Hiago Silva Souza');
 pix.setReceiverCity('Rio Preto');
-pix.setKey('fcba8826-cbff-46e2-8c40-1b39896402a8');
+pix.setKey('nubank@hiago.me');
 pix.setDescription('Donation without defined amount - GPIX'); // optional
-console.log('Donation without defined amount - GPIX >>>>\n', pix.getBRCode());
+console.log('\nDonation without defined amount - GPIX >>>>\n', pix.getBRCode());
 // Example 03: BRCODE dinamic
 var dpix = pix_1.PIX.dinamic();
 dpix.setReceiverName('Minha Empresa LTDA');
 dpix.setReceiverCity('Rio Preto');
-dpix.setLocation('url-location-psp');
-dpix.setAmount(10.4); // some PSP are not recovering the amount through the charge. Then temporarily enter the amount to avoid problems.
+dpix.setLocation('qrcodes-pix.gerencianet.com.br/v2/7398eefa79c94c4ba5e22da93fe291ea');
+// dpix.setAmount(10.4) // some PSP are not recovering the amount through the charge. Then temporarily enter the amount to avoid problems.
 console.log('\nBRCODE dinamic - GPIX >>>>\n', dpix.getBRCode());
-// Gerando QRCode em base64
-// Generating QRCode in base64
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/];
-    });
-}); })();
 // Saving QRCode to physical file
 // Salvando QRCode em arquivo físico
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                pix.setDescription('Free Donation / QRCODE - GPIX'); // opcional
+                pix.setDescription('Free Donation / QRCODE - GPIX'); // optional
                 return [4 /*yield*/, pix.saveQRCodeFile('./qrcode.png')];
             case 1:
                 if (_a.sent()) {
