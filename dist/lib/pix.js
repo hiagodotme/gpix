@@ -60,19 +60,23 @@ var PIX = /** @class */ (function () {
     };
     PIX.prototype.setLocation = function (location) {
         this._location = location.replace('https://', '');
+        return this;
     };
     PIX.prototype.setKey = function (key) {
         this._key = key;
+        return this;
     };
     PIX.prototype.setReceiverZipCode = function (zipCode) {
         if (zipCode.length != 8)
             throw 'A quantidade de caracteres para o código postal é 8';
         this._zip_code = zipCode;
+        return this;
     };
     PIX.prototype.setReceiverName = function (name) {
         if (name.length > 25)
             throw 'A quantidade máxima de caracteres para o nome do recebedor é 25';
         this._receiver_name = name;
+        return this;
     };
     PIX.prototype.setIdentificator = function (identificator) {
         if (identificator.length > 25)
@@ -80,59 +84,29 @@ var PIX = /** @class */ (function () {
         if (identificator.match(/[^0-9|a-z]/gi))
             throw 'Utilize apenas letras e números no identificador.';
         this._identificator = identificator;
+        return this;
     };
     PIX.prototype.setDescription = function (description) {
         if (description.length > 50)
             throw 'A quantidade máxima de caracteres para a descrição é 50';
         this._description = description;
+        return this;
     };
     PIX.prototype.setReceiverCity = function (city) {
         if (city.length > 15)
             throw 'A quantidade máxima de caracteres para a cidade do recebedor é 15';
         this._receiver_city = city;
+        return this;
     };
     PIX.prototype.setAmount = function (amout) {
         if (amout.toFixed(2).toString().length > 13)
             throw 'A quantidade máxima de caracteres para o valor é 13';
         this._amout = amout;
+        return this;
     };
     PIX.prototype.isUniqueTransaction = function (is_unique_transaction) {
         this._is_unique_transaction = is_unique_transaction;
-    };
-    PIX.prototype._normalizeText = function (value) {
-        return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:]/gi, ' ');
-    };
-    PIX.prototype._generateAccountInformation = function () {
-        var payload = [];
-        payload.push(this._getEMV('00', 'br.gov.bcb.pix'));
-        if (this._key) {
-            payload.push(this._getEMV('01', this._normalizeText(this._key)));
-        }
-        if (this._location) {
-            payload.push(this._getEMV('25', this._normalizeText(this._location)));
-        }
-        if (this._description) {
-            payload.push(this._getEMV('02', this._normalizeText(this._description)));
-        }
-        return payload.join('');
-    };
-    PIX.prototype._additionalDataField = function () {
-        if (this._identificator) {
-            var identificator = this._normalizeText(this._identificator);
-            var reference_label = this._getEMV('05', identificator);
-            // não funciona no inter/itau.
-            // let gui = this._getEMV('00', 'br.gov.bcb.brcode')
-            // let version = this._getEMV('01', '1.0.0')
-            // let payment_system_specific_template = this._getEMV('50', gui + version)
-            return this._getEMV('62', reference_label);
-        }
-        else {
-            return this._getEMV('62', this._getEMV('05', '***'));
-        }
-    };
-    PIX.prototype._getEMV = function (id, string) {
-        var len = string.length.toString().padStart(2, '0');
-        return "" + id + len + string;
+        return this;
     };
     PIX.prototype.getBRCode = function () {
         var lines = [];
@@ -218,6 +192,41 @@ var PIX = /** @class */ (function () {
                 }
             });
         });
+    };
+    PIX.prototype._normalizeText = function (value) {
+        return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:]/gi, ' ');
+    };
+    PIX.prototype._generateAccountInformation = function () {
+        var payload = [];
+        payload.push(this._getEMV('00', 'br.gov.bcb.pix'));
+        if (this._key) {
+            payload.push(this._getEMV('01', this._normalizeText(this._key)));
+        }
+        if (this._location) {
+            payload.push(this._getEMV('25', this._normalizeText(this._location)));
+        }
+        if (this._description) {
+            payload.push(this._getEMV('02', this._normalizeText(this._description)));
+        }
+        return payload.join('');
+    };
+    PIX.prototype._additionalDataField = function () {
+        if (this._identificator) {
+            var identificator = this._normalizeText(this._identificator);
+            var reference_label = this._getEMV('05', identificator);
+            // não funciona no inter/itau.
+            // let gui = this._getEMV('00', 'br.gov.bcb.brcode')
+            // let version = this._getEMV('01', '1.0.0')
+            // let payment_system_specific_template = this._getEMV('50', gui + version)
+            return this._getEMV('62', reference_label);
+        }
+        else {
+            return this._getEMV('62', this._getEMV('05', '***'));
+        }
+    };
+    PIX.prototype._getEMV = function (id, string) {
+        var len = string.length.toString().padStart(2, '0');
+        return "" + id + len + string;
     };
     return PIX;
 }());
