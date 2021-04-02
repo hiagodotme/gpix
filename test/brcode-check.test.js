@@ -1,10 +1,9 @@
-var expect  = require("chai").expect;
+const expect  = require("chai").expect,
+{ PIX } = require('../dist/index');
 
 describe("BRCode Check's", function() {
     // specification code
     it("Check BRCode Static integrity", function () {
-        let { PIX } = require('../dist/index');
-        
         let pix = PIX.static()
             .setReceiverName('Hiago Silva Souza')
             .setReceiverCity('Rio Preto')
@@ -20,8 +19,6 @@ describe("BRCode Check's", function() {
     });
 
     it("Check BRCode Dinamic integrity", function () {
-        let { PIX } = require('../dist/index');
-        
         let pix = PIX.dinamic()
             .setReceiverName('Minha Empresa LTDA')
             .setReceiverCity('Rio Preto')
