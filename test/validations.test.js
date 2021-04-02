@@ -46,8 +46,3 @@ describe("Validation tests", function() {
     });
 
 });
-
-
-describe("Static brcodes validation", function() {
-    // specification code
-});
