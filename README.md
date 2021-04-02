@@ -1,6 +1,6 @@
 # GPIX
 
-GPIX is a library that facilitates the generation of dynamic and static br-codes for the central bank of Brazil PIX arrangement.
+GPIX is a library that facilitates the generation and parser of dynamic and static br-codes for the central bank of Brazil PIX arrangement.
 
 [![GPIX](https://circleci.com/gh/hiagodotme/gpix.svg?style=svg)](https://circleci.com/gh/hiagodotme/gpix) [![GitHub issues](https://img.shields.io/github/issues/hiagodotme/gpix)](https://github.com/hiagodotme/gpix/issues) [![GitHub forks](https://img.shields.io/github/forks/hiagodotme/gpix)](https://github.com/hiagodotme/gpix/network) [![GitHub stars](https://img.shields.io/github/stars/hiagodotme/gpix)](https://github.com/hiagodotme/gpix/stargazers) [![GitHub license](https://img.shields.io/github/license/hiagodotme/gpix)](https://github.com/hiagodotme/gpix/blob/main/LICENSE)
 
