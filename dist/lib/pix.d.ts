@@ -5,7 +5,7 @@ export declare class PIX implements IDinamic, IStatic {
     private _key;
     private _receiver_name;
     private _receiver_city;
-    private _amout;
+    private _amount;
     private _zip_code;
     private _identificator;
     private _description;
@@ -13,6 +13,7 @@ export declare class PIX implements IDinamic, IStatic {
     private constructor();
     static static(): IStatic;
     static dinamic(): IDinamic;
+    static parse(brcode: string): void;
     setLocation(location: string): this;
     setKey(key: string): this;
     setReceiverZipCode(zipCode: string): this;
@@ -20,8 +21,17 @@ export declare class PIX implements IDinamic, IStatic {
     setIdentificator(identificator: string): this;
     setDescription(description: string): this;
     setReceiverCity(city: string): this;
-    setAmount(amout: number): this;
+    setAmount(amount: number): this;
     isUniqueTransaction(is_unique_transaction: boolean): this;
+    getReceiverName(): string;
+    getReceiverCity(): string;
+    getReceiverZipCode(): string;
+    getIdentificator(): string;
+    getDescription(): string;
+    getAmount(): number;
+    getKey(): string;
+    getIsUniqueTransaction(): boolean;
+    getLocation(): string;
     getBRCode(): string;
     getQRCode(): Promise<string | null>;
     saveQRCodeFile(out: string): Promise<unknown>;

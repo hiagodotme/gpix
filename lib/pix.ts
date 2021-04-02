@@ -10,7 +10,7 @@ export class PIX implements IDinamic, IStatic {
     private _key: string = ''
     private _receiver_name: string = ''
     private _receiver_city: string = ''
-    private _amout: number = 0
+    private _amount: number = 0
     private _zip_code: string = ''
     private _identificator: string = ''
     private _description: string = ''
@@ -24,6 +24,19 @@ export class PIX implements IDinamic, IStatic {
 
     public static dinamic(): IDinamic {
         return new PIX();
+    }
+
+    public static parse(brcode: string) {
+        let payload = brcode.substr(0, brcode.length - 4)
+        let crc = brcode.substr(brcode.length - 4, 4)
+
+        // verify crc
+        if(crc !== CRC.computeCRC(payload)) {
+            throw 'O CRC é inválido'
+        }
+
+        // caso o crc seja válido, inicia o parser
+
     }
 
     setLocation(location: string) {
@@ -81,18 +94,54 @@ export class PIX implements IDinamic, IStatic {
         return this;
     }
 
-    setAmount(amout: number) {
+    setAmount(amount: number) {
 
-        if (amout.toFixed(2).toString().length > 13)
+        if (amount.toFixed(2).toString().length > 13)
             throw 'A quantidade máxima de caracteres para o valor é 13'
 
-        this._amout = amout
+        this._amount = amount
         return this;
     }
 
     isUniqueTransaction(is_unique_transaction: boolean) {
         this._is_unique_transaction = is_unique_transaction
         return this;
+    }
+
+    getReceiverName(): string {
+        return this._receiver_name
+    }
+
+    getReceiverCity(): string {
+        return this._receiver_city
+    }
+
+    getReceiverZipCode(): string {
+        return this._zip_code;
+    }
+
+    getIdentificator(): string {
+        return this._identificator
+    }
+
+    getDescription(): string {
+        return this._description
+    }
+
+    getAmount(): number {
+        return this._amount;
+    }
+
+    getKey(): string {
+        return this._key
+    }
+
+    getIsUniqueTransaction(): boolean {
+        return this._is_unique_transaction
+    }
+
+    getLocation(): string {
+        return this._location
     }
 
     getBRCode() {
@@ -117,8 +166,8 @@ export class PIX implements IDinamic, IStatic {
         lines.push(this._getEMV('53', '986'));
 
         //Transaction Amount
-        if (this._amout) {
-            lines.push(this._getEMV('54', this._amout.toFixed(2)))
+        if (this._amount) {
+            lines.push(this._getEMV('54', this._amount.toFixed(2)))
         }
 
         // Country Code
@@ -171,11 +220,9 @@ export class PIX implements IDinamic, IStatic {
         })
     }
 
-
     private _normalizeText(value: string) {
         return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:]/gi, ' ')
     }
-
 
     private _generateAccountInformation(): string {
         const payload = [];

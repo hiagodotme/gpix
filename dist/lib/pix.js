@@ -46,7 +46,7 @@ var PIX = /** @class */ (function () {
         this._key = '';
         this._receiver_name = '';
         this._receiver_city = '';
-        this._amout = 0;
+        this._amount = 0;
         this._zip_code = '';
         this._identificator = '';
         this._description = '';
@@ -57,6 +57,15 @@ var PIX = /** @class */ (function () {
     };
     PIX.dinamic = function () {
         return new PIX();
+    };
+    PIX.parse = function (brcode) {
+        var payload = brcode.substr(0, brcode.length - 4);
+        var crc = brcode.substr(brcode.length - 4, 4);
+        // verify crc
+        if (crc !== crc_1.CRC.computeCRC(payload)) {
+            throw 'O CRC é inválido';
+        }
+        // caso o crc seja válido, inicia o parser
     };
     PIX.prototype.setLocation = function (location) {
         this._location = location.replace('https://', '');
@@ -98,15 +107,42 @@ var PIX = /** @class */ (function () {
         this._receiver_city = city;
         return this;
     };
-    PIX.prototype.setAmount = function (amout) {
-        if (amout.toFixed(2).toString().length > 13)
+    PIX.prototype.setAmount = function (amount) {
+        if (amount.toFixed(2).toString().length > 13)
             throw 'A quantidade máxima de caracteres para o valor é 13';
-        this._amout = amout;
+        this._amount = amount;
         return this;
     };
     PIX.prototype.isUniqueTransaction = function (is_unique_transaction) {
         this._is_unique_transaction = is_unique_transaction;
         return this;
+    };
+    PIX.prototype.getReceiverName = function () {
+        return this._receiver_name;
+    };
+    PIX.prototype.getReceiverCity = function () {
+        return this._receiver_city;
+    };
+    PIX.prototype.getReceiverZipCode = function () {
+        return this._zip_code;
+    };
+    PIX.prototype.getIdentificator = function () {
+        return this._identificator;
+    };
+    PIX.prototype.getDescription = function () {
+        return this._description;
+    };
+    PIX.prototype.getAmount = function () {
+        return this._amount;
+    };
+    PIX.prototype.getKey = function () {
+        return this._key;
+    };
+    PIX.prototype.getIsUniqueTransaction = function () {
+        return this._is_unique_transaction;
+    };
+    PIX.prototype.getLocation = function () {
+        return this._location;
     };
     PIX.prototype.getBRCode = function () {
         var lines = [];
@@ -124,8 +160,8 @@ var PIX = /** @class */ (function () {
         // Transaction Currency
         lines.push(this._getEMV('53', '986'));
         //Transaction Amount
-        if (this._amout) {
-            lines.push(this._getEMV('54', this._amout.toFixed(2)));
+        if (this._amount) {
+            lines.push(this._getEMV('54', this._amount.toFixed(2)));
         }
         // Country Code
         lines.push(this._getEMV('58', 'BR'));
