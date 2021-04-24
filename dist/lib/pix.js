@@ -194,7 +194,7 @@ var PIX = /** @class */ (function () {
         });
     };
     PIX.prototype._normalizeText = function (value) {
-        return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:]/gi, ' ');
+        return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:_]/gi, ' ');
     };
     PIX.prototype._generateAccountInformation = function () {
         var payload = [];

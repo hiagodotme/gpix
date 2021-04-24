@@ -173,7 +173,7 @@ export class PIX implements IDinamic, IStatic {
 
 
     private _normalizeText(value: string) {
-        return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:]/gi, ' ')
+        return value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z\[\]0-9$@%*+-\./:_]/gi, ' ')
     }
 
 
