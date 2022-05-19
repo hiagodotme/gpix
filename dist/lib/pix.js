@@ -226,7 +226,7 @@ var PIX = /** @class */ (function () {
     };
     PIX.prototype._getEMV = function (id, string) {
         var len = string.length.toString().padStart(2, '0');
-        return "" + id + len + string;
+        return "".concat(id).concat(len).concat(string);
     };
     return PIX;
 }());
