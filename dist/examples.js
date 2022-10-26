@@ -51,7 +51,7 @@ console.log('\nDonation with defined amount - GPIX >>>>\n', pix.getBRCode());
 pix = pix_1.PIX.static()
     .setReceiverName('Hiago Silva Souza')
     .setReceiverCity('Rio Preto')
-    .setKey('nubank@hiago.me')
+    .setKey('8d9f54ec-c00b-4878-9b7d-7096e9b2c011')
     .setDescription('Donation without defined amount - GPIX'); // optional
 console.log('\nDonation without defined amount - GPIX >>>>\n', pix.getBRCode());
 // Example 03: BRCODE dinamic
